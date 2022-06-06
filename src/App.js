@@ -88,7 +88,7 @@ function App() {
           <input
             className="input"
             type="text"
-            placeholder="search by artist or songs"
+            placeholder="search by artists or albums"
             value={valueSearchInput}
             onChange={(ev) => setValueSearchInput(ev.target.value)}
           ></input>

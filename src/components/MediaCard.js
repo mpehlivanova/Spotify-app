@@ -6,11 +6,10 @@ import ButtonComponents from "./ButtonComponents";
 
 export default function MediaCard(props) {
   return (
-    <Card sx={{ maxWidth: 200, minHeight: 350, minWidth: 150, maxHeight: 350 }}>
+    <Card sx={{ maxWidth: 200, minHeight: 250, minWidth: 150, maxHeight: 350 }}>
       <CardMedia
         component="img"
-        width={100}
-        height={150}
+        width={120}
         image={props.image}
         alt="green iguana"
       />
