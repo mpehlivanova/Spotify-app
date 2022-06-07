@@ -2,7 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import MediaCard from "./components/MediaCard";
 import { Dialog } from "@mui/material";
-import { validateText, keyGenerator } from "./util";
+import { validateText, keyGenerator, longText, checkDulex } from "./util";
 import AlbumList from "./components/AlbumList";
 import AlbumComponent from "./components/AlbumComponent";
 import ButtonComponents from "./components/ButtonComponents";
@@ -14,15 +14,23 @@ function App() {
   const [tracks, setTracks] = useState([]);
   const [valueSearchInput, setValueSearchInput] = useState("");
   const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
   const [view, setView] = useState(false);
-
+  const[set, setSet] = useState([])
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const handleClickOpen1= () => {
+    setOpen1(true);
+  };
+
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleClose1 = () => {
+    setOpen1(false);
   };
 
   const asic = {
@@ -31,7 +39,7 @@ function App() {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer BQCUgY3FFGW1ZtWs7ZxyMTpVGPbBAthmQnXDRBYFTJp8T3rRKRsC3Pp16EmkI6vm-S6VmJ7aW6iZw1olPsSbIxFjtpyhgXZ1IsxAONYQXjzYfvfC5d6q5RQyp501h8ih0ZVpoDciF3n_Zr9QH__ybn4C1R9cmgU_ouNo4TOdRrw",
+        "Bearer BQCcROQbSlV-B68xEZlESbmad_x7QreP8ncvHbrH5U5jXA_TOww2xV9sY05eZ1yF-BV35RJOKq5G08aSVWbojEJpVCvoPv1BsFXYlONkzhB02TNPkgt71TGX4n77bRAak98bnfmk89FHwU8bErwkau-RqOrCcamvw_fVmCbBtcY",
     },
   };
   const searchGetData = (search, type) => {
@@ -44,14 +52,13 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-      
+
         if (data.artists) {
           setArtistsData(data.artists.items);
         }
         if (data.albums) {
           setAlbumData(data.albums.items);
         }
-
       });
   };
 
@@ -62,8 +69,8 @@ function App() {
         console.log("artist");
         console.log(data.items);
         console.log(Array.isArray(data.items));
-
         setAlbum(data.items);
+        
       });
   };
   const getTracks = (idAlbums) => {
@@ -73,6 +80,7 @@ function App() {
         console.log("track");
         console.log(data.items);
         console.log(Array.isArray(data.items));
+
         setTracks(data.items);
       });
   };
@@ -80,7 +88,6 @@ function App() {
   useEffect(() => {
     // getAlbums("1atjqOZTCdrjxjMyCPZc2g")
   }, []);
-
   return (
     <>
       <div className="home">
@@ -113,34 +120,19 @@ function App() {
                 {artistsData.map((el) => {
                   return (
                     <div key={keyGenerator(12)}>
+                    
                       <MediaCard
                         key={keyGenerator(13)}
-                        image={el.images[2].url}
+                        image={el.images[2]?.url}
                         artist={el.name}
                         onClick={() => {
                           getAlbums(el.id); //get artist's albums
                           handleClickOpen();
                         }}
+                        data={album}
+                        open={open}
+                        onClose={()=>handleClose()}
                       />
-
-                      <Dialog fullScreen open={open} onClose={handleClose}>
-                        <div className="conatinerAlbum">
-                          <AlbumComponent
-                            onClick={handleClose}
-                            type="Artist's Albums"
-                          />
-                          {album &&
-                            album.map((e) => {
-                              return (
-                                <AlbumList
-                                  key={keyGenerator(15)}
-                                  src={e.images[0].url}
-                                  name={e.name}
-                                />
-                              );
-                            })}
-                        </div>
-                      </Dialog>
                     </div>
                   );
                 })}
@@ -159,23 +151,18 @@ function App() {
                     <div key={keyGenerator(11)}>
                       <MediaCard
                         key={keyGenerator(8)}
-                        image={el.images[1].url}
-                        name={el.name}
-                        artist={el.artists[0].name}
+                        image={el.images[1]?.url}
+                        name={longText(el.name,20)}
+                        artist={longText(el.artists[0].name,5)}
                         onClick={() => {
                           getTracks(el.id); //get album tracks
-                          
+                          handleClickOpen1()
                         }}
+                        data={tracks}
+                        open={open1}
+                        onClose={()=>handleClose1()}
                       />
-                      {/* <Dialog fullScreen open={open} onClose={handleClose}>
-                        <div className="conatinerAlbum">
-                          <AlbumComponent onClick={handleClose} type="Album Tracks" />
-                          {tracks &&
-                            tracks.map((e) => {
-                              return <p key={keyGenerator(6)}>{e.name}</p>;
-                            })}
-                        </div>
-                      </Dialog> */}
+                     
                     </div>
                   );
                 })}

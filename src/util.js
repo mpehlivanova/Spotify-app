@@ -18,3 +18,14 @@ export const validateText = (text) => {
     return "no title";
   }
 };
+
+export const longText = (text, n) => {
+  
+  if (typeof text === "string" && text.trim().length) {
+    if(text.length > 20){
+      return text.slice(0,n)+"..."
+    }else{
+      return text 
+    }
+}
+}
