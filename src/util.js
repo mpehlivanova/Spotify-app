@@ -29,3 +29,12 @@ export const longText = (text, n) => {
     }
 }
 }
+
+export const asic = {
+  method: "GET",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    Authorization:
+     "Bearer BQDx28iBpHWRBS7sW7Ki521_Pd8QJit590I_4hfFNmVBTM6puGg1PVhroIdPk8lVSAWL2Cg1W0dFWvxrRUq1KH_wQBeEU5T9JFoOiho1kQxyblmtH7uPtTiWsuV_CPI-tnkuinynHTLNwCOf8S5RfnrnflFu6DoA0uDlqG4L5NeiZgkglOojnJ7OeHgjEpKSPigHYTNBZsrD"},
+};

@@ -1,6 +1,4 @@
 import * as React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import ButtonComponents from "./ButtonComponents";
 import { Dialog } from "@mui/material";
@@ -9,14 +7,6 @@ import { keyGenerator } from "../util";
 import AlbumList from "./AlbumList";
 
 export default function MediaCard(props) {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
   return (
     <>
       <div
@@ -42,7 +32,7 @@ export default function MediaCard(props) {
             props.onClick();
           }}
           variant="outlined"
-          text="View more"
+          text={props.textButton}
         />
       </div>
 
@@ -54,8 +44,8 @@ export default function MediaCard(props) {
               return (
                 <AlbumList
                   key={keyGenerator(15)}
-                  // src={e.images[0]?.url} 
-                  name={e.name} 
+                  // src={e.images[0]?.url}
+                  name={e.name}
                 />
               );
             })}
