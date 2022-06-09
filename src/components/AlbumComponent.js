@@ -11,7 +11,6 @@ export default function AlbumComponent(props) {
       <IconButton
         onClick={props.onClick}
         color="primary"
-        aria-label="add to shopping cart"
       >
         <CloseIcon />
       </IconButton>
