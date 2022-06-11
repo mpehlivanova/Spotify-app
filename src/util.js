@@ -30,11 +30,27 @@ export const longText = (text, n) => {
 }
 }
 
+export const getFechData = (artists, idArtist, albums) => {
+  fetch("https://api.spotify.com/v1/" + artists + "/" + idArtist + "/"+ albums, asic)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("artist");
+      console.log(data.items);
+      console.log(Array.isArray(data.items));
+      if(data){
+        if(Array.isArray(data.items)){
+          return data.items
+        }
+      }
+     
+})
+}
+
 export const asic = {
   method: "GET",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
     Authorization:
-     "Bearer BQDx28iBpHWRBS7sW7Ki521_Pd8QJit590I_4hfFNmVBTM6puGg1PVhroIdPk8lVSAWL2Cg1W0dFWvxrRUq1KH_wQBeEU5T9JFoOiho1kQxyblmtH7uPtTiWsuV_CPI-tnkuinynHTLNwCOf8S5RfnrnflFu6DoA0uDlqG4L5NeiZgkglOojnJ7OeHgjEpKSPigHYTNBZsrD"},
-};
+    "Bearer BQDaZwCjPVfncjW3J7jomrwvYTgByXWxV6_SdngzX8RgxaZoMn6HtfrVJX6HZ38i5H2y5tBDlRcWzeP8sDDmIJfH1u8a-ZknQGiNOVtoLpfLCsBkkCaOzEHwpk0Wha9XLIiR3o4-m08zZ7oVSo233taqUR-0x49ms1p-TMsxMeJ8_hZ8pJ3_4G7vWX-zY8gHaZMhOn3gkLew"}
+  }
