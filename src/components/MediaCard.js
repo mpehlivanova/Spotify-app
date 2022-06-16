@@ -44,12 +44,12 @@ export default function MediaCard(props) {
           width={120}
           height={120}
           image={props.image}
-          alt="green iguana"
+          alt="photoCard"
         />
         <h4 className="text"> {props.name}</h4>
-        {props.artist && (
+        {props.artists && (
           <p className="text">
-            Artist: <strong>{props.artist}</strong>
+            Artist: <strong>{props.artists}</strong>
           </p>
         )}
 
@@ -65,8 +65,8 @@ export default function MediaCard(props) {
       <Dialog fullScreen open={props.open} onClose={props.onClose}>
         <ConatinerAlbum>
           <AlbumType onClick={props.onClose} type={props.type} />
-          {props.data &&
-            props.data?.map((e) => {
+          {props.dataDialog &&
+            props.dataDialog?.map((e) => {
               return (
                 <AlbumListStyl 
                 key={keyGenerator(6)}

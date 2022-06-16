@@ -14,37 +14,20 @@ export const keyGenerator = (length) => {
 export const validateText = (text) => {
   if (typeof text === "string" && text.trim().length) {
     return text;
-  } else {
-    return "no title";
-  }
+  }else
+  {return false}
+  
 };
 
 export const longText = (text, n) => {
-  
   if (typeof text === "string" && text.trim().length) {
-    if(text.length > 20){
-      return text.slice(0,n)+"..."
-    }else{
-      return text 
+    if (text.length > 20) {
+      return text.slice(0, n) + "...";
+    } else {
+      return text;
     }
-}
-}
-
-export const getFechData = (artists, idArtist, albums) => {
-  fetch("https://api.spotify.com/v1/" + artists + "/" + idArtist + "/"+ albums, asic)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("artist");
-      console.log(data.items);
-      console.log(Array.isArray(data.items));
-      if(data){
-        if(Array.isArray(data.items)){
-          return data.items
-        }
-      }
-     
-})
-}
+  }
+};
 
 export const asic = {
   method: "GET",
@@ -52,5 +35,47 @@ export const asic = {
     Accept: "application/json",
     "Content-Type": "application/json",
     Authorization:
-    "Bearer BQDaZwCjPVfncjW3J7jomrwvYTgByXWxV6_SdngzX8RgxaZoMn6HtfrVJX6HZ38i5H2y5tBDlRcWzeP8sDDmIJfH1u8a-ZknQGiNOVtoLpfLCsBkkCaOzEHwpk0Wha9XLIiR3o4-m08zZ7oVSo233taqUR-0x49ms1p-TMsxMeJ8_hZ8pJ3_4G7vWX-zY8gHaZMhOn3gkLew"}
-  }
+      "Bearer BQBaXkDI_03n4TpEP-F_BGpYGl98Am-1rvX3KVMGFhR-fNi4lZGxfxUpLLoNgxeXc3L-BHL8q2Wk6Nj7xRiJokxUdV00KFMxtV280i1N31u98MoPZqheVrKCrLvaKKR7HnJFIpumeCsVYRZ2dKLVPyRTfHF75uYMDE1Mj88NBDpUoNSvbpuqVGId2hcf68M9cavT2PnYybGU",
+  },
+
+}
+
+export const getFechData = (artists, idArtist, albums) => {
+  fetch(
+    "https://api.spotify.com/v1/" + artists + "/" + idArtist + "/" + albums,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization:"Bearer BQBaXkDI_03n4TpEP-F_BGpYGl98Am-1rvX3KVMGFhR-fNi4lZGxfxUpLLoNgxeXc3L-BHL8q2Wk6Nj7xRiJokxUdV00KFMxtV280i1N31u98MoPZqheVrKCrLvaKKR7HnJFIpumeCsVYRZ2dKLVPyRTfHF75uYMDE1Mj88NBDpUoNSvbpuqVGId2hcf68M9cavT2PnYybGU",
+      }
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("artist");
+      console.log(data.items);
+      console.log(Array.isArray(data.items));
+      if (data) {
+        if (Array.isArray(data.items)) {
+          return data.items;
+        }
+      }
+    });
+};
+
+export const checkToken = (token) => {
+
+  let asic = {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization:
+        {token},
+    },
+  };
+
+  return asic;
+};

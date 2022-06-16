@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import * as React from "react";
-import { keyGenerator } from "../util";
+import { keyGenerator, longText } from "../util";
 import MediaCard from "./MediaCard";
 
 const ContainerCards = styled("div")`
@@ -31,18 +31,20 @@ export default function ContainerCard(props) {
       <Container>
         <h3>Artist</h3>
         <ContainerCards>
-          {props.artistsData?.map((el) => {
+          {props.data?.map((el) => {
+            
             return (
               <div key={keyGenerator(12)}>
                 <MediaCard
                   key={keyGenerator(13)}
                   image={el.images[2]?.url}
-                  artist={el.name}
+                  artists={el.artists && longText(el.artists[0]?.name, 20)}
+                  name={longText(el.name, 20)}  
                   onClick={() => {
                     handleGetAlbums(el.id);
                     handleOpenAlbum();
                   }}
-                  data={props.album}
+                  dataDialog={props.album}
                   open={props.open}
                   onClose={() => props.onClose()}
                   textButton={props.textButton}
