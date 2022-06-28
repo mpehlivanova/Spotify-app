@@ -65,8 +65,7 @@ export default function MediaCard(props) {
       <Dialog fullScreen open={props.open} onClose={props.onClose}>
         <ConatinerAlbum>
           <AlbumType onClick={props.onClose} type={props.type} />
-          {props.dataDialog &&
-            props.dataDialog?.map((e) => {
+          {props.dataDialog?.map((e) => {
               return (
                 <AlbumListStyl 
                 key={keyGenerator(6)}

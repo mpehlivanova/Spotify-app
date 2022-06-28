@@ -1,27 +1,30 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { validateText, asic, getFechData } from "./util";
+import { validateText, asic } from "./util";
 import ContainerCard from "./components/ConatinerCard";
 import styled from "@emotion/styled";
-import Header from "./components/Header";
+import Header from "./components/SearchBar";
+import { useDispatch, useSelector } from "react-redux";
+import HomePage from "./pages/HomePage";
+import SearchBar from "./components/SearchBar";
+import LeftSideBar from "./components/LeftSideBar";
+import { Box } from "@mui/system";
 
 function App() {
   const [artistsData, setArtistsData] = useState([]);
   const [albumData, setAlbumData] = useState([]);
   const [tracks, setTracks] = useState([]);
+  const [album, setAlbum] = useState([]);
   const [valueSearchInput, setValueSearchInput] = useState("");
   const [openTrack, setOpenTrack] = useState(false);
   const [view, setView] = useState(false);
   const [openAlbum, setOpenAlbum] = useState(false);
-  const [album, setAlbum] = useState([]);
   const [errSearch, setErrSearch] = useState(false);
-
-  const Home = styled("div")`
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-  `;
+  const dispatch = useDispatch();
+  const foundAlbums = useSelector((store) => store.data?.foundAlbums[0]);
+  const albumTracks = useSelector((store) => store.data?.artistAlbums[0]);
+  const foundArtists = useSelector((store) => store.data?.foundArtists[0]);
+  const artistAlbums = useSelector((store) => store.data?.artistAlbums[0]);
 
   const handleOnCange = (ev) => {
     setValueSearchInput(ev.target.value);
@@ -40,13 +43,18 @@ function App() {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log("data");
-          console.log(data);
-
           if (data.artists) {
+            dispatch({
+              type: "FOUNDARTISTS",
+              payload: data.artists.items,
+            });
             setArtistsData(data.artists.items);
           }
           if (data.albums) {
+            dispatch({
+              type: "FOUNDALBUMS",
+              payload: data.albums.items,
+            });
             setAlbumData(data.albums.items);
           }
         });
@@ -57,83 +65,85 @@ function App() {
     setValueSearchInput("");
     setView(true);
   };
-  // const handleGetArtistsAlbums = (id) => {
-  //   if (id) {
-  //     let dataAlbum = getFechData("artists", id, "albums");
-  //     setAlbum(dataAlbum);
-  //     console.log("album    " + dataAlbum);
-  //   }
-  // };
 
-  const getArtistsAlbums = (idArtist) => {
-    fetch("https://api.spotify.com/v1/artists/" + idArtist + "/albums", asic)
+  const getFechData = (artists, idArtist, albums) => {
+    fetch(
+      "https://api.spotify.com/v1/" + artists + "/" + idArtist + "/" + albums,
+      asic
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("artist");
         console.log(data.items);
         console.log(Array.isArray(data.items));
-        setAlbum(data.items);
-      });
-  };
-
-  const getTracks = (idAlbums) => {
-    fetch("https://api.spotify.com/v1/albums/" + idAlbums + "/tracks", asic)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("track");
-        console.log(data.items);
-        console.log(Array.isArray(data.items));
-        setTracks(data.items);
+        if (data.items[0].type === "album") {
+          dispatch({
+            type: "ARTISTALBUMS",
+            payload: data.items,
+          });
+        }
+        if (data.items[0].type === "track") {
+          dispatch({
+            type: "ALBUMSTRAKCKS",
+            payload: data.items,
+          });
+        }
       });
   };
 
   useEffect(() => {
-    searchGetData("a", "album");
-    searchGetData("a", "artist");
-    // console.log(albumData[0].artists[0].name);
+    // console.log(foundAlbums);
+    // console.log(artistsData);
   }, []);
   return (
     <>
-      <Home>
-        <Header
-          value={valueSearchInput}
-          onChange={(ev) => handleOnCange(ev)}
-          searchGetDataArtist={() => searchGetData(valueSearchInput, "artist")}
-          searchGetDataAlbum={() => searchGetData(valueSearchInput, "album")}
-          err={errSearch}
-        />
-        <>
-          {view && (
-            <ContainerCard
-              data={artistsData}
-              onClick={() => {}}
-              getData={(id) => {
-                // handleGetArtistsAlbums(id);
-                getArtistsAlbums(id);
-              }}
-              setOpen={() => setOpenAlbum(true)}
-              dataDialog={album}
-              open={openAlbum}
-              onClose={() => setOpenAlbum(false)}
-              textButton="view albums"
-              typeAlbum="albums"
-            />
-          )}
-        </>
-        {view && (
-          <ContainerCard
-            data={albumData}
-            onClick={() => {}}
-            getData={(id) => getTracks(id)}
-            setOpen={() => setOpenTrack(true)}
-            dataDialog={tracks}
-            open={openTrack}
-            onClose={() => setOpenTrack(false)}
-            textButton="view tracks"
-            typeAlbum="tracks"
+      <Box display="flex" justifyContent="row">
+        <LeftSideBar />
+        <Box width="100%" >
+          <SearchBar
+            value={valueSearchInput}
+            onChange={(ev) => handleOnCange(ev)}
+            fechArtists={() => searchGetData(valueSearchInput, "artist")}
+            fechAlbums={() => searchGetData(valueSearchInput, "album")}
+            err={errSearch}
           />
-        )}
-      </Home>
+          <Box paddingLeft = "5%">
+            {view && (
+              <ContainerCard
+                title="Artists"
+                data={foundArtists}
+                onClick={() => {}}
+                getData={(id) => {
+                  getFechData("artists", id, "albums");
+                }}
+                setOpen={() => setOpenAlbum(true)}
+                dataDialog={artistAlbums}
+                open={openAlbum}
+                onClose={() => setOpenAlbum(false)}
+                textButton="view albums"
+                typeAlbum="albums"
+              />
+            )}
+
+            {view && (
+              <ContainerCard
+                title="Albums"
+                data={foundAlbums}
+                onClick={() => {}}
+                getData={(id) => {
+                  getFechData("albums", id, "tracks");
+                }}
+                setOpen={() => setOpenTrack(true)}
+                dataDialog={albumTracks}
+                open={openTrack}
+                onClose={() => setOpenTrack(false)}
+                textButton="view tracks"
+                typeAlbum="tracks"
+              />
+            )}
+          </Box>
+        </Box>
+      </Box>
     </>
   );
 }
